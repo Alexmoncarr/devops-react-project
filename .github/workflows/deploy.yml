@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install and Build Calculator
+        run: |
+          cd calculator
+          npm install
+          npm run build
+          mv build ../public/calculator
+
+      - name: Install and Build Tic-Tac-Toe
+        run: |
+          cd ../tic-tac-toe
+          npm install
+          npm run build
+          mv build ../public/tic-tac-toe
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: 'Alexmoncarr.github.io'
