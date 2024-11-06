@@ -17,21 +17,25 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies for Calculator and build
+      - name: Build Calculator (if exists)
         run: |
-          mkdir -p public/calculator
-          cd calculator
-          npm install
-          npm run build
-          mv build ../public/calculator
+          if [ -d "calculator" ]; then
+            mkdir -p public/calculator
+            cd calculator
+            npm install
+            npm run build
+            mv build ../public/calculator
+          fi
 
-      - name: Install dependencies for Tic-Tac-Toe and build
+      - name: Build Tic-Tac-Toe (if exists)
         run: |
-          mkdir -p ../public/tic-tac-toe
-          cd ../tic-tac-toe
-          npm install
-          npm run build
-          mv build ../public/tic-tac-toe
+          if [ -d "tic-tac-toe" ]; then
+            mkdir -p public/tic-tac-toe
+            cd tic-tac-toe
+            npm install
+            npm run build
+            mv build ../public/tic-tac-toe
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
