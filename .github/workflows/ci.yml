@@ -1,0 +1,39 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [calculator, tic-tac-toe]  # Ejecuta pruebas para ambas aplicaciones
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Puedes cambiar la versión si es necesario
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.app }}
+          npm install
+
+      - name: Run tests
+        run: |
+          cd ${{ matrix.app }}
+          npm test
+
+      - name: Build application
+        run: |
+          cd ${{ matrix.app }}
+          npm run build
